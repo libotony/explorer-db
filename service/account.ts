@@ -5,6 +5,7 @@ import { hexToBuffer } from '../utils'
 import { AssetType } from '../types'
 import { Transaction } from '../entity/transaction'
 import { Block } from '../entity/block'
+import { TokenBalance } from '../entity/token-balance'
 
 export const getAccount = (addr: string, manager?: EntityManager) => {
     if (!manager) {
@@ -14,6 +15,19 @@ export const getAccount = (addr: string, manager?: EntityManager) => {
     return manager
         .getRepository(Account)
         .findOne({ address: addr })
+}
+
+export const getTokenBalance = (addr: string, manager?: EntityManager) => {
+    if (!manager) {
+        manager = getConnection().manager
+    }
+
+    return manager
+        .getRepository(TokenBalance)
+        .createQueryBuilder('tb')
+        .where('tb.address = :address', { address: hexToBuffer(addr) })
+        .orderBy('tb.type', 'ASC')
+        .getMany()
 }
 
 export const countAccountTransaction = (addr: string, manager?: EntityManager) => {
