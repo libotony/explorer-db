@@ -49,7 +49,7 @@ export const getBlockByNumber = (num: number, manager?: EntityManager) => {
 
     return manager
         .getRepository(Block)
-        .findOne({number: num})
+        .findOne({number: num, isTrunk: true})
 }
 
 export const getBlockTransactions = async (blockID: string, manager?: EntityManager) => {
