@@ -1,11 +1,11 @@
 import { getConnection, EntityManager } from 'typeorm'
 import { Account } from '../entity/account'
 import { AssetMovement } from '../entity/movement'
-import { hexToBuffer } from '../utils'
 import { AssetType } from '../types'
 import { Transaction } from '../entity/transaction'
 import { Block } from '../entity/block'
 import { TokenBalance } from '../entity/token-balance'
+import { hexToBuffer } from '../utils'
 
 export const getAccount = (addr: string, manager?: EntityManager) => {
     if (!manager) {
@@ -112,7 +112,7 @@ export const getAccountTransferByType = (
         .getRepository(AssetMovement)
         .find({
             where: [{ sender: addr, type }, { recipient: addr, type }],
-            order: { blockID: 'DESC', moveIndex: 'DESC', type: 'ASC' },
+            order: { blockID: 'DESC', moveIndex: 'DESC' },
             skip: offset,
             take: limit
         })

@@ -12,18 +12,6 @@ export const getAuthority = (addr: string, manager?: EntityManager) => {
         .findOne({ address: addr })
 }
 
-export const countSignedBlocks = (addr: string, manager?: EntityManager) => {
-    if (!manager) {
-        manager = getConnection().manager
-    }
-
-    return manager
-        .getRepository(Block)
-        .count({
-            where: { signer: addr, isTrunk: true }
-        })
-}
-
 export const getSignedBlocks = (addr: string, offset: number, limit: number, manager?: EntityManager) => {
     if (!manager) {
         manager = getConnection().manager

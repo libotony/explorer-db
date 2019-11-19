@@ -15,6 +15,7 @@ export const getTransaction = (txID: string, manager?: EntityManager) => {
         .leftJoin(Block, 'block', 'block.id = tx.blockID')
         .where('block.isTrunk = :isTrunk', { isTrunk: true })
         .andWhere('tx.txID = :txID', { txID: hexToBuffer(txID) })
+        .limit(1)
         .getOne()
 }
 
@@ -29,5 +30,6 @@ export const getReceipt = (txID: string, manager?: EntityManager) => {
         .leftJoin(Block, 'block', 'block.id = receipt.blockID')
         .where('block.isTrunk = :isTrunk', { isTrunk: true })
         .andWhere('receipt.txID = :txID', { txID: hexToBuffer(txID) })
+        .limit(1)
         .getOne()
 }
