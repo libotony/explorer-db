@@ -24,10 +24,7 @@ export const getTokenBalance = (addr: string, manager?: EntityManager) => {
 
     return manager
         .getRepository(TokenBalance)
-        .createQueryBuilder('tb')
-        .where('tb.address = :address', { address: hexToBuffer(addr) })
-        .orderBy('tb.type', 'ASC')
-        .getMany()
+        .find({where: {address: addr}, order: {type: 'ASC'}})
 }
 
 export const countAccountTransaction = (addr: string, manager?: EntityManager) => {
@@ -36,12 +33,12 @@ export const countAccountTransaction = (addr: string, manager?: EntityManager) =
     }
 
     return manager
-    .getRepository(Transaction)
-    .createQueryBuilder('tx')
-    .leftJoin(Block, 'block', 'block.id = tx.blockID')
-    .where('block.isTrunk = :isTrunk', { isTrunk: true })
-    .andWhere('tx.origin = :origin', { origin: hexToBuffer(addr) })
-    .getCount()
+        .getRepository(Transaction)
+        .createQueryBuilder('tx')
+        .leftJoin(Block, 'block', 'block.id = tx.blockID')
+        .where('block.isTrunk = :isTrunk', { isTrunk: true })
+        .andWhere('tx.origin = :origin', { origin: hexToBuffer(addr) })
+        .getCount()
 }
 
 export const getAccountTransaction = (addr: string, offset: number, limit: number, manager?: EntityManager) => {
@@ -66,12 +63,11 @@ export const countAccountTransfer = (addr: string, manager?: EntityManager) => {
     if (!manager) {
         manager = getConnection().manager
     }
-
     return manager
         .getRepository(AssetMovement)
-        .createQueryBuilder('transfer')
-        .where('transfer.sender = :address OR transfer.recipient = :address', { address: hexToBuffer(addr) })
-        .getCount()
+        .count({
+            where: [{ sender: addr }, { recipient: addr }]
+        })
 }
 
 export const getAccountTransfer = (addr: string, offset: number, limit: number, manager?: EntityManager) => {
@@ -81,14 +77,12 @@ export const getAccountTransfer = (addr: string, offset: number, limit: number, 
 
     return manager
         .getRepository(AssetMovement)
-        .createQueryBuilder('transfer')
-        .where('transfer.sender = :address OR transfer.recipient = :address', { address: hexToBuffer(addr) })
-        .orderBy('blockID', 'DESC')
-        .addOrderBy('moveIndex', 'DESC')
-        .addOrderBy('type', 'ASC')
-        .offset(offset)
-        .limit(limit)
-        .getMany()
+        .find({
+            where: [{ sender: addr }, { recipient: addr }],
+            order: { blockID: 'DESC', moveIndex: 'DESC', type: 'ASC' },
+            skip: offset,
+            take: limit
+        })
 }
 
 export const countAccountTransferByType = (addr: string, type: AssetType, manager?: EntityManager) => {
@@ -98,12 +92,9 @@ export const countAccountTransferByType = (addr: string, type: AssetType, manage
 
     return manager
         .getRepository(AssetMovement)
-        .createQueryBuilder('transfer')
-        .where('(transfer.sender = :address OR transfer.recipient = :address) AND transfer.type = :type', {
-            address: hexToBuffer(addr),
-            type
+        .count({
+            where: [{ sender: addr, type }, { recipient: addr, type }]
         })
-        .getCount()
 }
 
 export const getAccountTransferByType = (
@@ -119,15 +110,10 @@ export const getAccountTransferByType = (
 
     return manager
         .getRepository(AssetMovement)
-        .createQueryBuilder('transfer')
-        .where('(transfer.sender = :address OR transfer.recipient = :address) AND transfer.type = :type', {
-            address: hexToBuffer(addr),
-            type
+        .find({
+            where: [{ sender: addr, type }, { recipient: addr, type }],
+            order: { blockID: 'DESC', moveIndex: 'DESC', type: 'ASC' },
+            skip: offset,
+            take: limit
         })
-        .orderBy('blockID', 'DESC')
-        .addOrderBy('moveIndex', 'DESC')
-        .addOrderBy('type', 'ASC')
-        .offset(offset)
-        .limit(limit)
-        .getMany()
 }

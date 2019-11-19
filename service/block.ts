@@ -1,7 +1,6 @@
 import { getConnection, EntityManager, } from 'typeorm'
 import { Block } from '../entity/block'
 import { Transaction } from '../entity/transaction'
-import { hexToBuffer } from '../utils'
 import { Receipt } from '../entity/receipt'
 
 export const getBest = (manager?: EntityManager) => {
@@ -11,11 +10,10 @@ export const getBest = (manager?: EntityManager) => {
 
     return manager
         .getRepository(Block)
-        .createQueryBuilder('block')
-        .where('isTrunk=:isTrunk', { isTrunk: true })
-        .orderBy('id', 'DESC')
-        .limit(1)
-        .getOne() as Promise<Block>
+        .findOne({
+            where: { isTrunk: true },
+            order: {id: 'DESC'}
+        }) as Promise<Block>
 }
 
 export const getRecentBlocks = (limit: number, manager?: EntityManager) => {
@@ -25,11 +23,11 @@ export const getRecentBlocks = (limit: number, manager?: EntityManager) => {
 
     return manager
         .getRepository(Block)
-        .createQueryBuilder()
-        .where('block.isTrunk = :isTrunk', { isTrunk: true })
-        .orderBy('block.id', 'DESC')
-        .limit(limit)
-        .getMany()
+        .find({
+            where: { isTrunk: true },
+            order: { id: 'DESC' },
+            take: limit
+        })
 }
 
 export const getBlockByID = (blockID: string, manager?: EntityManager) => {
@@ -59,10 +57,10 @@ export const getBlockTransactions = async (blockID: string, manager?: EntityMana
 
     return manager
         .getRepository(Transaction)
-        .createQueryBuilder()
-        .where('blockID = :blockID', { blockID: hexToBuffer(blockID) })
-        .orderBy('txIndex', 'ASC')
-        .getMany()
+        .find({
+            where: { blockID },
+            order: {txIndex: 'ASC'}
+        })
 }
 
 export const getBlockReceipts = async (blockID: string, manager?: EntityManager) => {
@@ -72,8 +70,8 @@ export const getBlockReceipts = async (blockID: string, manager?: EntityManager)
 
     return manager
         .getRepository(Receipt)
-        .createQueryBuilder()
-        .where('blockID = :blockID', { blockID: hexToBuffer(blockID) })
-        .orderBy('txIndex', 'ASC')
-        .getMany()
+        .find({
+            where: { blockID },
+            order: {txIndex: 'ASC'}
+        })
 }

@@ -8,9 +8,8 @@ export const getRecentTransfers = (limit: number, manager?: EntityManager) => {
 
     return manager
         .getRepository(AssetMovement)
-        .createQueryBuilder()
-        .orderBy('blockID', 'DESC')
-        .addOrderBy('moveIndex', 'DESC')
-        .limit(limit)
-        .getMany()
+        .find({
+            order: { blockID: 'DESC', moveIndex: 'DESC', type: 'ASC' },
+            take: limit
+        })
 }
