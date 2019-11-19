@@ -4,9 +4,9 @@ import { Entity, PrimaryColumn, Column } from 'typeorm'
 export class Config {
 
     @PrimaryColumn({unique: true})
-    public key: string
+    public key!: string
 
     @Column()
-    public value: string
+    public value!: string
 
 }

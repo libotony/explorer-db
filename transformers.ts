@@ -4,7 +4,7 @@ import { MovementIndex } from './types'
 
 interface ValueTransformer<DBType, EntityType> {
     from: (val: DBType) => EntityType,
-    to: (val: EntityType|FindOperator<EntityType>) => DBType
+    to: (val: EntityType) => DBType
 }
 
 // transformers not work in FindOperators(issue of typeorm)
@@ -41,17 +41,17 @@ export const fixedBytes = (len= 32, context: string, nullable= false) =>  {
             if (nullable && val === null) {
                 return null
             }
-            return '0x' + val.toString('hex')
+            return '0x' + val!.toString('hex')
         },
         to: (val: string|null) => {
             if (nullable && val === null) {
                 return null
             }
-            if (!/^0x[0-9a-fA-f]+/i.test(val)) {
+            if (!/^0x[0-9a-fA-f]+/i.test(val!)) {
                 throw new Error(context + ': bytes' + len + ' hex string required: ' + val)
             }
 
-            const str = sanitizeHex(val).padStart(len * 2, '0')
+            const str = sanitizeHex(val!).padStart(len * 2, '0')
             return Buffer.from(str, 'hex')
         }
     })
@@ -63,21 +63,21 @@ export const compactFixedBytes = (len = 32, context: string, nullable = false) =
             if (nullable && val === null) {
                 return null
             }
-            const index = val.findIndex(x => x !== 0)
+            const index = val!.findIndex(x => x !== 0)
             if (index > 0) {
-                val = val.slice(index)
+                val = val!.slice(index)
             }
-            return '0x' + val.toString('hex')
+            return '0x' + val!.toString('hex')
         },
         to: (val: string|null) => {
             if (nullable && val === null) {
                 return null
             }
-            if (!/^0x[0-9a-fA-f]+/i.test(val)) {
+            if (!/^0x[0-9a-fA-f]+/i.test(val!)) {
                 throw new Error(context + ': bytes' + len + ' hex string required: ' + val)
             }
 
-            const str = sanitizeHex(val).padStart(len * 2, '0')
+            const str = sanitizeHex(val!).padStart(len * 2, '0')
             return Buffer.from(str, 'hex')
         }
     })
@@ -100,18 +100,18 @@ export const bytes = (context: string, nullable = false) =>  {
             if (nullable && val === null) {
                 return null
             }
-            return '0x' + val.toString('hex')
+            return '0x' + val!.toString('hex')
         },
         to: (val: string|null) => {
             if (nullable && val === null) {
                 return null
             }
 
-            if (!/^0x[0-9a-fA-f]*/i.test(val)) {
+            if (!/^0x[0-9a-fA-f]*/i.test(val!)) {
                 throw new Error(context + ': bytes hex string required: ' + val)
             }
 
-            const str = sanitizeHex(val)
+            const str = sanitizeHex(val!)
             if (str.length === 0 && nullable) {
                 return null
             }
@@ -127,7 +127,7 @@ export const simpleJSON = <T>(context: string, nullable = false) => {
             if (nullable && val === null) {
                 return null
             }
-            return JSON.parse(val) as T
+            return JSON.parse(val!) as T
         },
         to: (val: T | null) => {
             if (nullable && val === null) {

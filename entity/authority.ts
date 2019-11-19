@@ -4,24 +4,24 @@ import {fixedBytes, amount} from '../transformers'
 @Entity()
 export class Authority {
     @PrimaryGeneratedColumn('increment')
-    public id: number
+    public id!: number
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'authority.address') })
     @Index({unique: true})
-    public address: string
+    public address!: string
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'authority.endorsor') })
-    public endorsor: string
+    public endorsor!: string
 
     @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'authority.identity') })
-    public identity: string
+    public identity!: string
 
     @Column({ type: 'binary', length: 24, transformer: amount })
-    public reward: bigint
+    public reward!: bigint
 
     @Column()
-    public listed: boolean
+    public listed!: boolean
 
     @Column()
-    public signed: number
+    public signed!: number
 }

@@ -4,20 +4,20 @@ import {fixedBytes, amount, bytes} from '../transformers'
 @Entity()
 export class Account {
     @PrimaryColumn({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.address') })
-    public address: string
+    public address!: string
 
     @Column({ type: 'binary', length: 24, transformer: amount })
-    public balance: bigint
+    public balance!: bigint
 
     @Column({ type: 'binary', length: 24, transformer: amount })
-    public energy: bigint
+    public energy!: bigint
 
     @Column({ unsigned: true })
-    public blockTime: number
+    public blockTime!: number
 
     @Column({ type: 'blob', nullable: true, transformer: bytes('account.code', true) })
-    public code: string
+    public code!: string|null
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.master', true), nullable: true })
-    public master: string
+    public master!: string|null
 }

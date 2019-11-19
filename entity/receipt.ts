@@ -6,33 +6,33 @@ import { fixedBytes, simpleJSON, amount } from '../transformers'
 @Index('receiptUnique', ['blockID', 'txID'], { unique: true })
 export class Receipt {
     @PrimaryGeneratedColumn('increment')
-    public id: number
+    public id!: number
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'receipt.txID') })
     @Index()
-    public txID: string
+    public txID!: string
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'transaction.blockID') })
-    public blockID: string
+    public blockID!: string
 
     @Column()
-    public txIndex: number
+    public txIndex!: number
 
     @Column({unsigned: true})
-    public gasUsed: number
+    public gasUsed!: number
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'receipt.gasPayer') })
-    public gasPayer: string
+    public gasPayer!: string
 
     @Column({ type: 'binary', length: 24, transformer: amount })
-    public paid: bigint
+    public paid!: bigint
 
     @Column({ type: 'binary', length: 24, transformer: amount })
-    public reward: bigint
+    public reward!: bigint
 
     @Column({ type: 'boolean' })
-    public reverted: boolean
+    public reverted!: boolean
 
     @Column({ type: 'longtext', transformer: simpleJSON<Output[]>('receipt.outputs')})
-    public outputs: Output[]
+    public outputs!: Output[]
 }

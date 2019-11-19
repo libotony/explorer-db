@@ -15,7 +15,7 @@ export const getBest = (manager?: EntityManager) => {
         .where('isTrunk=:isTrunk', { isTrunk: true })
         .orderBy('id', 'DESC')
         .limit(1)
-        .getOne()
+        .getOne() as Promise<Block>
 }
 
 export const getRecentBlocks = (limit: number, manager?: EntityManager) => {

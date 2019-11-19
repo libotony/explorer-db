@@ -4,55 +4,55 @@ import {fixedBytes, amount} from '../transformers'
 @Entity()
 export class Block {
     @PrimaryColumn({type: 'binary', length: 32, transformer: fixedBytes(32, 'block.id')})
-    public id: string
+    public id!: string
 
     @Index()
     @Column()
-    public number: number
+    public number!: number
 
     @Column({unsigned: true})
-    public timestamp: number
+    public timestamp!: number
 
     @Column({unsigned: true})
-    public gasLimit: number
+    public gasLimit!: number
 
     @Column({unsigned: true})
-    public gasUsed: number
+    public gasUsed!: number
 
     @Column({unsigned: true})
-    public totalScore: number
+    public totalScore!: number
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'block.parentID') })
-    public parentID: string
+    public parentID!: string
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'block.txsRoot') })
-    public txsRoot: string
+    public txsRoot!: string
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'block.stateRoot') })
-    public stateRoot: string
+    public stateRoot!: string
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'block.receiptsRoot') })
-    public receiptsRoot: string
+    public receiptsRoot!: string
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'block.signer') })
     @Index()
-    public signer: string
+    public signer!: string
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'block.beneficiary') })
-    public beneficiary: string
+    public beneficiary!: string
 
     @Column({type: 'boolean'})
-    public isTrunk: boolean
+    public isTrunk!: boolean
 
     @Column()
-    public txsFeatures: number
+    public txsFeatures!: number
 
     @Column()
-    public score: number
+    public score!: number
 
     @Column({ type: 'binary', length: 24, transformer: amount })
-    public reward: bigint
+    public reward!: bigint
 
     @Column()
-    public size: number
+    public size!: number
 }

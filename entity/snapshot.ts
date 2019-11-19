@@ -5,15 +5,15 @@ import { simpleJSON, fixedBytes } from '../transformers'
 @Entity()
 export class Snapshot {
     @PrimaryGeneratedColumn('increment')
-    public id: number
+    public id!: number
 
     @Column()
-    public type: SnapType
+    public type!: SnapType
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'snapshot.blockID') })
     @Index()
-    public blockID: string
+    public blockID!: string
 
     @Column({ type: 'longtext', nullable: true, transformer: simpleJSON<object>('snapshot.data', true)})
-    public data: object
+    public data!: object|null
 }

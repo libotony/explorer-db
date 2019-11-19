@@ -8,26 +8,26 @@ import { AssetType, MovementIndex } from '../types'
 @Index(['recipient', 'blockID', 'moveIndex'])
 export class AssetMovement {
     @PrimaryGeneratedColumn('increment')
-    public id: number
+    public id!: number
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'transfer.sender') })
-    public sender: string
+    public sender!: string
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'transfer.recipient') })
-    public recipient: string
+    public recipient!: string
 
     @Column({ type: 'binary', length: 24, transformer: amount })
-    public amount: bigint
+    public amount!: bigint
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'transfer.blockID') })
-    public blockID: string
+    public blockID!: string
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'transfer.txID') })
-    public txID: string
+    public txID!: string
 
     @Column()
-    public type: AssetType
+    public type!: AssetType
 
     @Column({ type: 'binary', length: 6, transformer: movementIndex })
-    public moveIndex: MovementIndex
+    public moveIndex!: MovementIndex
 }

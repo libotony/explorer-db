@@ -5,12 +5,12 @@ import { fixedBytes } from '../transformers'
 export class GasAdjustment {
 
     @PrimaryColumn({type: 'binary', length: 32, transformer: fixedBytes(32, 'block.id')})
-    public blockID: string
+    public blockID!: string
 
     @Column({type: 'binary', length: 32, transformer: fixedBytes(32, 'block.id')})
-    public prevBlock: string
+    public prevBlock!: string
 
     @Column()
-    public gasDiff: number
+    public gasDiff!: number
 
 }

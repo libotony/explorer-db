@@ -7,49 +7,49 @@ import { Clause } from '../types'
 @Index(['blockID', 'txIndex'])
 export class Transaction {
     @PrimaryGeneratedColumn('increment')
-    public id: number
+    public id!: number
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.txID') })
     @Index()
-    public txID: string
+    public txID!: string
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.blockID') })
-    public blockID: string
+    public blockID!: string
 
     @Column()
-    public txIndex: number
+    public txIndex!: number
 
     @Column({ type: 'binary', length: 1, transformer: chainTag })
-    public chainTag: number
+    public chainTag!: number
 
     @Column({ type: 'binary', length: 8, transformer: fixedBytes(8 , 'tx.blockRef') })
-    public blockRef: string
+    public blockRef!: string
 
     @Column({ unsigned: true })
-    public expiration: number
+    public expiration!: number
 
     @Column({ unsigned: true })
-    public gasPriceCoef: number
+    public gasPriceCoef!: number
 
     @Column({ unsigned: true })
-    public gas: number
+    public gas!: number
 
     @Column({ type: 'binary', length: 8, transformer: compactFixedBytes(8, 'tx.nonce') })
-    public nonce: string
+    public nonce!: string
 
     @Column({ type: 'binary', length: 32, nullable: true, transformer: fixedBytes(32, 'tx.dependsOn', true) })
-    public dependsOn: string
+    public dependsOn!: string|null
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'tx.origin') })
     @Index()
-    public origin: string
+    public origin!: string
 
     @Column({ type: 'binary', length: 20, nullable: true, transformer: fixedBytes(20, 'tx.delegator', true) })
-    public delegator: string
+    public delegator!: string|null
 
     @Column({ type: 'longtext', transformer: simpleJSON<Clause[]>('tx.clauses')})
-    public clauses: Clause[]
+    public clauses!: Clause[]
 
     @Column()
-    public size: number
+    public size!: number
 }
