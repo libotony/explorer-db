@@ -9,7 +9,7 @@ export const getAuthority = (addr: string, manager?: EntityManager) => {
 
     return manager
         .getRepository(Authority)
-        .findOne({ address: addr })
+        .findOne({ address: addr, listed: true })
 }
 
 export const getSignedBlocks = (addr: string, offset: number, limit: number, manager?: EntityManager) => {
