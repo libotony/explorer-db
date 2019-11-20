@@ -1,6 +1,7 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { Output } from '../types'
 import { fixedBytes, simpleJSON, amount } from '../transformers'
+import { Block } from './block'
 
 @Entity()
 @Index('receiptUnique', ['blockID', 'txID'], { unique: true })
@@ -14,6 +15,10 @@ export class Receipt {
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'transaction.blockID') })
     public blockID!: string
+
+    @ManyToOne(type => Block)
+    @JoinColumn({name: 'blockID'})
+    public block!: Block
 
     @Column()
     public txIndex!: number

@@ -34,11 +34,9 @@ export const countAccountTransaction = (addr: string, manager?: EntityManager) =
 
     return manager
         .getRepository(Transaction)
-        .createQueryBuilder('tx')
-        .leftJoin(Block, 'block', 'block.id = tx.blockID')
-        .where('block.isTrunk = :isTrunk', { isTrunk: true })
-        .andWhere('tx.origin = :origin', { origin: hexToBuffer(addr) })
-        .getCount()
+        .count({
+            where: {block: { isTrunk: true }, origin: addr}
+        })
 }
 
 export const getAccountTransaction = (addr: string, offset: number, limit: number, manager?: EntityManager) => {
@@ -48,15 +46,15 @@ export const getAccountTransaction = (addr: string, offset: number, limit: numbe
 
     return manager
         .getRepository(Transaction)
-        .createQueryBuilder('tx')
-        .leftJoin(Block, 'block', 'block.id = tx.blockID')
-        .where('block.isTrunk = :isTrunk', { isTrunk: true })
-        .andWhere('tx.origin = :origin', { origin: hexToBuffer(addr) })
-        .orderBy('blockID', 'DESC')
-        .addOrderBy('txIndex', 'DESC')
-        .offset(offset)
-        .limit(limit)
-        .getMany ()
+        .find({
+            where: {block: { isTrunk: true }, origin: addr},
+            order: {
+                blockID: 'DESC',
+                txIndex: 'DESC'
+            },
+            skip: offset,
+            take: limit
+        })
 }
 
 export const countAccountTransfer = (addr: string, manager?: EntityManager) => {

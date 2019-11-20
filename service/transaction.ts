@@ -1,8 +1,6 @@
 import { EntityManager, getConnection } from 'typeorm'
-import { Block } from '../entity/block'
 import { Transaction } from '../entity/transaction'
 import { Receipt } from '../entity/receipt'
-import { hexToBuffer } from '../utils'
 
 export const getTransaction = (txID: string, manager?: EntityManager) => {
     if (!manager) {
@@ -11,12 +9,10 @@ export const getTransaction = (txID: string, manager?: EntityManager) => {
 
     return manager
         .getRepository(Transaction)
-        .createQueryBuilder('tx')
-        .leftJoin(Block, 'block', 'block.id = tx.blockID')
-        .where('block.isTrunk = :isTrunk', { isTrunk: true })
-        .andWhere('tx.txID = :txID', { txID: hexToBuffer(txID) })
-        .limit(1)
-        .getOne()
+        .findOne({
+            where: { txID, block: { isTrunk: true } },
+            relations: ['block']
+        })
 }
 
 export const getReceipt = (txID: string, manager?: EntityManager) => {
@@ -26,10 +22,7 @@ export const getReceipt = (txID: string, manager?: EntityManager) => {
 
     return manager
         .getRepository(Receipt)
-        .createQueryBuilder('receipt')
-        .leftJoin(Block, 'block', 'block.id = receipt.blockID')
-        .where('block.isTrunk = :isTrunk', { isTrunk: true })
-        .andWhere('receipt.txID = :txID', { txID: hexToBuffer(txID) })
-        .limit(1)
-        .getOne()
+        .findOne({
+            where: { txID, block: {isTrunk: true}}
+        })
 }
