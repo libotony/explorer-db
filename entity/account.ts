@@ -19,5 +19,8 @@ export class Account {
     public code!: string|null
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.master', true), nullable: true })
-    public master!: string|null
+    public master!: string | null
+
+    @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.sponsor', true), nullable: true })
+    public sponsor!: string|null
 }

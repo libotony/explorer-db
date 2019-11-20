@@ -45,6 +45,9 @@ export class Block {
     public isTrunk!: boolean
 
     @Column()
+    public txCount!: number
+
+    @Column()
     public txsFeatures!: number
 
     @Column()
