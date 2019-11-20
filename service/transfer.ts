@@ -9,7 +9,7 @@ export const getRecentTransfers = (limit: number, manager?: EntityManager) => {
     return manager
         .getRepository(AssetMovement)
         .find({
-            order: { blockID: 'DESC', moveIndex: 'DESC', type: 'ASC' },
+            order: { blockID: 'DESC', moveIndex: 'DESC' },
             take: limit
         })
 }

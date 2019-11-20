@@ -79,7 +79,7 @@ export const getAccountTransfer = (addr: string, offset: number, limit: number, 
         .getRepository(AssetMovement)
         .find({
             where: [{ sender: addr }, { recipient: addr }],
-            order: { blockID: 'DESC', moveIndex: 'DESC', type: 'ASC' },
+            order: { blockID: 'DESC', moveIndex: 'DESC' },
             skip: offset,
             take: limit
         })
