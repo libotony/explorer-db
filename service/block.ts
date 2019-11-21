@@ -1,4 +1,4 @@
-import { getConnection, EntityManager, } from 'typeorm'
+import { getConnection, EntityManager, In, } from 'typeorm'
 import { Block } from '../entity/block'
 import { Transaction } from '../entity/transaction'
 import { Receipt } from '../entity/receipt'
@@ -48,6 +48,40 @@ export const getBlockByNumber = (num: number, manager?: EntityManager) => {
     return manager
         .getRepository(Block)
         .findOne({number: num, isTrunk: true})
+}
+
+export const getBlockNeighbour = async (num: number, manager?: EntityManager) => {
+    if (!manager) {
+        manager = getConnection().manager
+    }
+
+    if (num === 0) {
+        const block = await manager
+            .getRepository(Block)
+            .findOne({
+                where: { number: 1, isTrunk: true },
+                select: ['id']
+            })
+        return {
+            prev: null,
+            next: block!.id
+        }
+    } else {
+        const blocks = await manager
+            .getRepository(Block)
+            .find({
+                where: { number: In([num-1, num+1]), isTrunk: true },
+                select: ['id']
+            })
+        const ret:{prev:string|null, next: string|null} = {
+            prev: blocks[0].id,
+            next: null
+        }
+        if (blocks.length === 2) {
+            ret.next = blocks[1]!.id
+        }
+        return ret
+    }
 }
 
 export const getBlockTransactions = async (blockID: string, manager?: EntityManager) => {
