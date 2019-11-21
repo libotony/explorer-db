@@ -7,11 +7,3 @@ export const sanitizeHex = (val: string) => {
     }
     return val
 }
-
-export const hexToBuffer = (val: string) => {
-    if ( !/^0x[0-9a-fA-f]+/i.test(val)) {
-        throw new Error('hex string required as param but got: ' + val)
-    }
-
-    return Buffer.from(sanitizeHex(val), 'hex')
-}

@@ -3,9 +3,7 @@ import { Account } from '../entity/account'
 import { AssetMovement } from '../entity/movement'
 import { AssetType } from '../types'
 import { Transaction } from '../entity/transaction'
-import { Block } from '../entity/block'
 import { TokenBalance } from '../entity/token-balance'
-import { hexToBuffer } from '../utils'
 
 export const getAccount = (addr: string, manager?: EntityManager) => {
     if (!manager) {
@@ -34,9 +32,11 @@ export const countAccountTransaction = (addr: string, manager?: EntityManager) =
 
     return manager
         .getRepository(Transaction)
-        .count({
-            where: {block: { isTrunk: true }, origin: addr}
-        })
+        .createQueryBuilder('tx')
+        .where({ origin: addr })
+        .leftJoin('tx.block', 'block')
+        .andWhere('block.isTrunk = :isTrunk', { isTrunk: true })
+        .getCount()
 }
 
 export const getAccountTransaction = (addr: string, offset: number, limit: number, manager?: EntityManager) => {
@@ -46,15 +46,15 @@ export const getAccountTransaction = (addr: string, offset: number, limit: numbe
 
     return manager
         .getRepository(Transaction)
-        .find({
-            where: {block: { isTrunk: true }, origin: addr},
-            order: {
-                blockID: 'DESC',
-                txIndex: 'DESC'
-            },
-            skip: offset,
-            take: limit
-        })
+        .createQueryBuilder('tx')
+        .where({ origin: addr })
+        .leftJoinAndSelect('tx.block', 'block')
+        .andWhere('block.isTrunk = :isTrunk', { isTrunk: true })
+        .orderBy('tx.blockID', 'DESC')
+        .addOrderBy('tx.txIndex', 'DESC')
+        .skip(offset)
+        .take(limit)
+        .getMany()
 }
 
 export const countAccountTransfer = (addr: string, manager?: EntityManager) => {
@@ -79,7 +79,8 @@ export const getAccountTransfer = (addr: string, offset: number, limit: number, 
             where: [{ sender: addr }, { recipient: addr }],
             order: { blockID: 'DESC', moveIndex: 'DESC' },
             skip: offset,
-            take: limit
+            take: limit,
+            relations: ['block']
         })
 }
 
@@ -112,6 +113,7 @@ export const getAccountTransferByType = (
             where: [{ sender: addr, type }, { recipient: addr, type }],
             order: { blockID: 'DESC', moveIndex: 'DESC' },
             skip: offset,
-            take: limit
+            take: limit,
+            relations: ['block']
         })
 }

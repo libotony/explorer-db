@@ -9,10 +9,28 @@ export const getTransaction = (txID: string, manager?: EntityManager) => {
 
     return manager
         .getRepository(Transaction)
-        .findOne({
-            where: { txID, block: { isTrunk: true } },
-            relations: ['block']
-        })
+        .createQueryBuilder('tx')
+        .where({ txID })
+        .leftJoin('tx.block', 'block')
+        .andWhere('block.isTrunk = :isTrunk', { isTrunk: true })
+        .limit(1)
+        .getOne()
+}
+
+export const getTransactionWithBlock = (txID: string, manager?: EntityManager) => {
+    if (!manager) {
+        manager = getConnection().manager
+    }
+
+    return manager
+        .getRepository(Transaction)
+        .createQueryBuilder('tx')
+        .where({ txID })
+        .leftJoinAndSelect('tx.block', 'block')
+        .andWhere('block.isTrunk = :isTrunk', { isTrunk: true })
+        .limit(1)
+        .getOne()
+
 }
 
 export const getReceipt = (txID: string, manager?: EntityManager) => {
@@ -22,7 +40,10 @@ export const getReceipt = (txID: string, manager?: EntityManager) => {
 
     return manager
         .getRepository(Receipt)
-        .findOne({
-            where: { txID, block: {isTrunk: true}}
-        })
+        .createQueryBuilder('receipt')
+        .where({ txID })
+        .leftJoin('receipt.block', 'block')
+        .andWhere('block.isTrunk = :isTrunk', { isTrunk: true })
+        .limit(1)
+        .getOne()
 }
