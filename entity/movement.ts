@@ -28,6 +28,7 @@ export class AssetMovement {
     public blockID!: string
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'move.txID') })
+    @Index()
     public txID!: string
 
     @Column()
