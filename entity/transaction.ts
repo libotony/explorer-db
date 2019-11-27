@@ -5,7 +5,8 @@ import { Block } from './block'
 
 @Entity()
 @Index('txUnique', ['blockID', 'txID'], { unique: true })
-@Index(['blockID', 'txIndex'])
+ @Index(['blockID', 'txIndex'])
+@Index(['origin', 'blockID'])
 export class Transaction {
     @PrimaryGeneratedColumn('increment')
     public id!: number
