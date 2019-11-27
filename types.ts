@@ -31,7 +31,7 @@ export enum SnapType {
 
 export enum AssetType {
     VET = 0,
-    Energy,
+    VTHO,
     PLA,
     SHA,
     EHrT,
