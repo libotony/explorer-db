@@ -5,8 +5,8 @@ import { Block } from './block'
 
 @Entity()
 @Index('txUnique', ['blockID', 'txID'], { unique: true })
- @Index(['blockID', 'txIndex'])
-@Index(['origin', 'blockID'])
+@Index(['blockID', 'txIndex'])
+@Index(['origin', 'blockID', 'txIndex'])
 export class Transaction {
     @PrimaryGeneratedColumn('increment')
     public id!: number
@@ -47,7 +47,6 @@ export class Transaction {
     public dependsOn!: string|null
 
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'tx.origin') })
-    @Index()
     public origin!: string
 
     @Column({ type: 'binary', length: 20, nullable: true, transformer: fixedBytes(20, 'tx.delegator', true) })
