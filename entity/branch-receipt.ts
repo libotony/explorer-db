@@ -1,19 +1,19 @@
-import { Column, Entity, ManyToOne, JoinColumn, PrimaryColumn, OneToOne, Index } from 'typeorm'
+import { Column, Entity, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { Output } from '../types'
 import { fixedBytes, simpleJSON, amount } from '../transformers'
-import { Transaction } from './transaction'
 import { Block } from './block'
 
 @Entity()
-export class Receipt {
-    @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'receipt.txID') })
+@Index('branchReceiptUnique', ['blockID', 'txID'], { unique: true })
+export class BranchReceipt {
+    @PrimaryGeneratedColumn('increment')
+    public id!: number
+
+    @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'branch-receipt.txID') })
+    @Index()
     public txID!: string
 
-    @OneToOne(type => Transaction, tx => tx.receipt)
-    @JoinColumn({name: 'txID'})
-    public transaction!: Transaction
-
-    @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'receipt.blockID') })
+    @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'branch-receipt.blockID') })
     public blockID!: string
 
     @ManyToOne(type => Block)
@@ -26,7 +26,7 @@ export class Receipt {
     @Column({unsigned: true})
     public gasUsed!: number
 
-    @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'receipt.gasPayer') })
+    @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'branch-receipt.gasPayer') })
     public gasPayer!: string
 
     @Column({ type: 'binary', length: 24, transformer: amount })
@@ -38,6 +38,6 @@ export class Receipt {
     @Column({ type: 'boolean' })
     public reverted!: boolean
 
-    @Column({ type: 'longtext', transformer: simpleJSON<Output[]>('receipt.outputs')})
+    @Column({ type: 'longtext', transformer: simpleJSON<Output[]>('branch-receipt.outputs')})
     public outputs!: Output[]
 }

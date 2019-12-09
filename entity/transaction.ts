@@ -1,19 +1,18 @@
-import { Entity, Column, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { Entity, Column, Index, ManyToOne, JoinColumn, PrimaryColumn, OneToOne } from 'typeorm'
 import { fixedBytes, simpleJSON, compactFixedBytes, chainTag } from '../transformers'
 import { Clause } from '../types'
 import { Block } from './block'
+import { Receipt } from './receipt'
 
 @Entity()
-@Index('txUnique', ['blockID', 'txID'], { unique: true })
 @Index(['blockID', 'txIndex'])
 @Index(['origin', 'blockID', 'txIndex'])
 export class Transaction {
-    @PrimaryGeneratedColumn('increment')
-    public id!: number
-
-    @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.txID') })
-    @Index()
+    @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.txID') })
     public txID!: string
+
+    @OneToOne(type => Receipt, receipt => receipt.transaction)
+    public receipt!: Receipt
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.blockID') })
     public blockID!: string
