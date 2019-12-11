@@ -41,7 +41,8 @@ export enum AssetType {
     SNK,
     JUR,
     AQD,
-    YEET
+    YEET,
+    HAI
 }
 
 export interface MovementIndex {
