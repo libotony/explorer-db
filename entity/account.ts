@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm'
-import {fixedBytes, amount, bytes} from '../transformers'
+import { fixedBytes, amount, bytes } from '../transformers'
 
 @Entity()
 export class Account {
@@ -24,6 +24,10 @@ export class Account {
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.sponsor', true), nullable: true })
     public sponsor!: string | null
 
+    @Column({ type: 'varchar', nullable: true })
+    public alias!: string | null
+
     @Column()
     public txCount!: number
+
 }

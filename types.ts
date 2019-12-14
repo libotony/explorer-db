@@ -26,6 +26,7 @@ export enum SnapType {
     DualToken = 0,
     Authority,
     GasAdjustment,
+    BuyBackHacker,
     VIP180Token = 100
 }
 
