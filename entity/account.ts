@@ -15,6 +15,9 @@ export class Account {
     @Column({ unsigned: true })
     public blockTime!: number
 
+    @Column({ unsigned: true })
+    public firstSeen!: number
+
     @Column({ type: 'blob', nullable: true, transformer: bytes('account.code', true) })
     public code!: string|null
 
@@ -29,5 +32,4 @@ export class Account {
 
     @Column()
     public txCount!: number
-
 }
