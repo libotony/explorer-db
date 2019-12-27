@@ -45,8 +45,13 @@ export enum AssetType {
     HAI
 }
 
-export interface MovementIndex {
+export interface MoveIndex {
     txIndex: number
     clauseIndex: number
     logIndex: number
+}
+
+export interface MoveSeq {
+    blockNumber: number,
+    moveIndex: MoveIndex
 }

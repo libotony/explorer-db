@@ -1,6 +1,6 @@
 import { sanitizeHex } from './utils'
 import { FindOperator} from 'typeorm'
-import { MovementIndex } from './types'
+import { MoveIndex, MoveSeq } from './types'
 
 interface ValueTransformer<DBType, EntityType> {
     from: (val: DBType) => EntityType,
@@ -138,15 +138,15 @@ export const simpleJSON = <T>(context: string, nullable = false) => {
     })
 }
 
-export const movementIndex = makeTransformer({
-    from: (val: Buffer): MovementIndex => {
+export const moveIndex = makeTransformer({
+    from: (val: Buffer): MoveIndex => {
         return {
             txIndex: val.readUInt16BE(0),
             clauseIndex: val.readUInt16BE(2),
             logIndex: val.readUInt16BE(4)
         }
     },
-    to: (val: MovementIndex) => {
+    to: (val: MoveIndex) => {
         const buf = Buffer.alloc(6)
         buf.writeUInt16BE(val.txIndex, 0)
         buf.writeUInt16BE(val.clauseIndex, 2)
@@ -164,6 +164,28 @@ export const chainTag = makeTransformer({
         const buf = Buffer.alloc(1)
         buf.writeUInt8(val, 0)
 
+        return buf
+    }
+})
+
+export const moveSeq = makeTransformer({
+    from: (val: Buffer): MoveSeq => {
+        return {
+            blockNumber: val.readInt32BE(0),
+            moveIndex: {
+                txIndex: val.readUInt16BE(4),
+                clauseIndex: val.readUInt16BE(6),
+                logIndex: val.readUInt16BE(8)
+            }
+        }
+    },
+    to: (val: MoveSeq) => {
+        const buf = Buffer.alloc(10)
+
+        buf.writeUInt32BE(val.blockNumber, 0)
+        buf.writeUInt16BE(val.moveIndex.txIndex, 4)
+        buf.writeUInt16BE(val.moveIndex.clauseIndex, 6)
+        buf.writeUInt16BE(val.moveIndex.logIndex, 8)
         return buf
     }
 })
