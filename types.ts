@@ -55,3 +55,8 @@ export interface MoveSeq {
     blockNumber: number,
     moveIndex: MoveIndex
 }
+
+export enum MoveDirection {
+    In,
+    Out
+}

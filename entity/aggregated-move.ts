@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } from 'typeorm'
 import { fixedBytes, moveSeq } from '../transformers'
-import { AssetType, MoveSeq } from '../types'
+import { AssetType, MoveSeq, MoveDirection } from '../types'
 import { AssetMovement } from './movement'
 
 @Entity()
@@ -25,4 +25,7 @@ export class AggregatedMovement {
 
     @Column({ type: 'binary', length: 10, transformer: moveSeq })
     public seq!: MoveSeq
+
+    @Column()
+    public direction!: MoveDirection
 }
