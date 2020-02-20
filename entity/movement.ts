@@ -5,6 +5,7 @@ import { Block } from './block'
 import { AggregatedMovement } from './aggregated-move'
 
 @Entity()
+@Index(['blockID', 'moveIndex'])
 export class AssetMovement {
     @PrimaryGeneratedColumn('increment')
     public id!: number
