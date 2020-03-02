@@ -26,6 +26,7 @@ export enum SnapType {
     DualToken = 0,
     Authority,
     GasAdjustment,
+    ExpandTX,
     VIP180Token = 100
 }
 
@@ -54,6 +55,11 @@ export interface MoveIndex {
 export interface MoveSeq {
     blockNumber: number,
     moveIndex: MoveIndex
+}
+
+export interface TXSeq {
+    blockNumber: number,
+    txIndex: number
 }
 
 export enum MoveDirection {

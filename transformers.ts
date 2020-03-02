@@ -1,6 +1,6 @@
 import { sanitizeHex } from './utils'
 import { FindOperator} from 'typeorm'
-import { MoveIndex, MoveSeq } from './types'
+import { MoveIndex, MoveSeq, TXSeq } from './types'
 
 interface ValueTransformer<DBType, EntityType> {
     from: (val: DBType) => EntityType,
@@ -186,6 +186,22 @@ export const moveSeq = makeTransformer({
         buf.writeUInt16BE(val.moveIndex.txIndex, 4)
         buf.writeUInt16BE(val.moveIndex.clauseIndex, 6)
         buf.writeUInt16BE(val.moveIndex.logIndex, 8)
+        return buf
+    }
+})
+
+export const txSeq = makeTransformer({
+    from: (val: Buffer): TXSeq => {
+        return {
+            blockNumber: val.readInt32BE(0),
+            txIndex: val.readUInt16BE(4),
+        }
+    },
+    to: (val: TXSeq) => {
+        const buf = Buffer.alloc(6)
+
+        buf.writeUInt32BE(val.blockNumber, 0)
+        buf.writeUInt16BE(val.txIndex, 4)
         return buf
     }
 })

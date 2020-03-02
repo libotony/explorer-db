@@ -10,7 +10,7 @@ export class AggregatedMovement {
     @PrimaryGeneratedColumn('increment')
     public id!: number
 
-    @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'movementLog.participant') })
+    @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'aggregatedMove.participant') })
     public participant!: string
 
     @Column()
