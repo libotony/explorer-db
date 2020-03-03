@@ -1,11 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } from 'typeorm'
 import { fixedBytes, moveSeq } from '../transformers'
-import { AssetType, MoveSeq, MoveDirection } from '../types'
+import { AssetType, MoveSeq, MoveType } from '../types'
 import { AssetMovement } from './movement'
 
 @Entity()
 @Index(['participant', 'seq'])
-@Index(['participant', 'type', 'seq'])
+@Index(['participant', 'asset', 'seq'])
 export class AggregatedMovement {
     @PrimaryGeneratedColumn('increment')
     public id!: number
@@ -14,7 +14,7 @@ export class AggregatedMovement {
     public participant!: string
 
     @Column()
-    public type!: AssetType
+    public asset!: AssetType
 
     @Column()
     public movementID!: number
@@ -27,5 +27,5 @@ export class AggregatedMovement {
     public seq!: MoveSeq
 
     @Column()
-    public direction!: MoveDirection
+    public type!: MoveType
 }

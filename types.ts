@@ -62,7 +62,7 @@ export interface TXSeq {
     txIndex: number
 }
 
-export enum MoveDirection {
+export enum MoveType {
     In,
     Out
 }

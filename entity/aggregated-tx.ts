@@ -1,11 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } from 'typeorm'
 import { fixedBytes, txSeq } from '../transformers'
-import { MoveDirection, TXSeq } from '../types'
+import { TXSeq, MoveType } from '../types'
 import { Block } from './block'
 
 @Entity()
 @Index(['participant', 'seq'])
-@Index(['participant', 'direction', 'seq'])
+@Index(['participant', 'type', 'seq'])
 export class AggregatedTransaction {
     @PrimaryGeneratedColumn('increment')
     public id!: number
@@ -14,7 +14,7 @@ export class AggregatedTransaction {
     public participant!: string|null
 
     @Column()
-    public direction!: MoveDirection
+    public type!: MoveType
 
     @Column({ type: 'binary', length: 10, transformer: txSeq })
     public seq!: TXSeq
