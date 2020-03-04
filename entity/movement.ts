@@ -31,7 +31,7 @@ export class AssetMovement {
     public txID!: string
 
     @Column()
-    public type!: AssetType
+    public asset!: AssetType
 
     @Column({ type: 'binary', length: 6, transformer: moveIndex })
     public moveIndex!: MoveIndex

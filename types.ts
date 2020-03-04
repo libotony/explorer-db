@@ -64,5 +64,6 @@ export interface TXSeq {
 
 export enum MoveType {
     In,
-    Out
+    Out,
+    Self
 }

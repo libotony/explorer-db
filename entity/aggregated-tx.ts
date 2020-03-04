@@ -2,6 +2,8 @@ import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } 
 import { fixedBytes, txSeq } from '../transformers'
 import { TXSeq, MoveType } from '../types'
 import { Block } from './block'
+import { Transaction } from './transaction'
+import { Receipt } from './receipt'
 
 @Entity()
 @Index(['participant', 'seq'])
@@ -26,6 +28,19 @@ export class AggregatedTransaction {
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'aggregatedTX.blockID') })
     public blockID!: string
 
+    @ManyToOne(type => Block)
+    @JoinColumn({name: 'blockID'})
+    public tx!: Block
+
+    @ManyToOne(type => Transaction, { onDelete: 'SET NULL', onUpdate: 'SET NULL' })
+    @JoinColumn({name: 'txID'})
+    public transaction!: Transaction
+
+    @ManyToOne(type => Receipt, { onDelete: 'SET NULL', onUpdate: 'SET NULL' })
+    @JoinColumn({name: 'txID'})
+    public receipt!: Receipt
+
+    // No foreign key on, use modified migration to initiate database
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'aggregatedTX.txID')})
     public txID!: string
 }
