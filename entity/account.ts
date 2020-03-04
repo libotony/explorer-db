@@ -29,7 +29,4 @@ export class Account {
 
     @Column({ type: 'varchar', nullable: true })
     public alias!: string | null
-
-    @Column()
-    public txCount!: number
 }
