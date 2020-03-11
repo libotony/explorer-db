@@ -16,11 +16,17 @@ export class Authority {
     @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'authority.identity') })
     public identity!: string
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
-    public reward!: bigint
-
     @Column()
     public listed!: boolean
+
+    @Column()
+    public active!: boolean
+
+    @Column()
+    public endorsed!: boolean
+
+    @Column({ type: 'binary', length: 24, transformer: amount })
+    public reward!: bigint
 
     @Column()
     public signed!: number

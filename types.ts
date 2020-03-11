@@ -67,3 +67,12 @@ export enum MoveType {
     Out,
     Self
 }
+
+export enum AuthEvent {
+    Added,
+    Revoked,
+    Endorsed,
+    Unendorsed,
+    Activate,
+    Deactivate
+}
