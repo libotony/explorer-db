@@ -57,5 +57,8 @@ export class Block {
     public reward!: bigint
 
     @Column()
+    public gasChanged!: number
+
+    @Column()
     public size!: number
 }
