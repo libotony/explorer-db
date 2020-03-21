@@ -1,12 +1,10 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn, PrimaryColumn, OneToOne } from 'typeorm'
-import { fixedBytes, simpleJSON, compactFixedBytes, chainTag } from '../transformers'
-import { Clause } from '../types'
+import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, txSeq } from '../transformers'
+import { Clause, TXSeq } from '../types'
 import { Block } from './block'
 import { Receipt } from './receipt'
 
 @Entity()
-@Index(['blockID', 'txIndex'])
-@Index(['origin', 'blockID', 'txIndex'])
 export class Transaction {
     @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.txID') })
     public txID!: string
@@ -21,8 +19,9 @@ export class Transaction {
     @JoinColumn({name: 'blockID'})
     public block!: Block
 
-    @Column()
-    public txIndex!: number
+    @Index()
+    @Column({ type: 'binary', length: 10, transformer: txSeq })
+    public seq!: TXSeq
 
     @Column({ type: 'binary', length: 1, transformer: chainTag })
     public chainTag!: number

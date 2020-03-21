@@ -1,6 +1,6 @@
 import { Entity, Column, Index, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { fixedBytes, simpleJSON, compactFixedBytes, chainTag } from '../transformers'
-import { Clause } from '../types'
+import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, txSeq } from '../transformers'
+import { Clause, TXSeq } from '../types'
 import { Block } from './block'
 
 @Entity()
@@ -20,8 +20,8 @@ export class BranchTransaction {
     @JoinColumn({name: 'blockID'})
     public block!: Block
 
-    @Column()
-    public txIndex!: number
+    @Column({ type: 'binary', length: 10, transformer: txSeq })
+    public seq!: TXSeq
 
     @Column({ type: 'binary', length: 1, transformer: chainTag })
     public chainTag!: number

@@ -20,9 +20,6 @@ export class Receipt {
     @JoinColumn({name: 'blockID'})
     public block!: Block
 
-    @Column()
-    public txIndex!: number
-
     @Column({unsigned: true})
     public gasUsed!: number
 
