@@ -1,27 +1,16 @@
-import { Entity, Column, Index, ManyToOne, JoinColumn, PrimaryColumn, OneToOne } from 'typeorm'
-import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, txSeq } from '../transformers'
-import { Clause, TXSeq } from '../types'
-import { Block } from './block'
-import { Receipt } from './receipt'
+import { Entity, Column, JoinColumn, PrimaryColumn, OneToOne } from 'typeorm'
+import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, amount } from '../transformers'
+import { Clause, Output } from '../types'
+import { TransactionMeta } from './tx-meta'
 
 @Entity()
 export class Transaction {
     @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.txID') })
     public txID!: string
 
-    @OneToOne(type => Receipt, receipt => receipt.transaction)
-    public receipt!: Receipt
-
-    @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.blockID') })
-    public blockID!: string
-
-    @ManyToOne(type => Block)
-    @JoinColumn({name: 'blockID'})
-    public block!: Block
-
-    @Index()
-    @Column({ type: 'binary', length: 10, transformer: txSeq })
-    public seq!: TXSeq
+    @OneToOne(type => TransactionMeta, meta => meta.transaction, {onDelete: 'CASCADE'})
+    @JoinColumn({name: 'txID'})
+    public meta!: TransactionMeta
 
     @Column({ type: 'binary', length: 1, transformer: chainTag })
     public chainTag!: number
@@ -54,5 +43,27 @@ export class Transaction {
     public clauses!: Clause[]
 
     @Column()
+    public clauseCount!: number
+
+    @Column()
     public size!: number
+
+    // receipt
+    @Column({unsigned: true})
+    public gasUsed!: number
+
+    @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'receipt.gasPayer') })
+    public gasPayer!: string
+
+    @Column({ type: 'binary', length: 24, transformer: amount })
+    public paid!: bigint
+
+    @Column({ type: 'binary', length: 24, transformer: amount })
+    public reward!: bigint
+
+    @Column({ type: 'boolean' })
+    public reverted!: boolean
+
+    @Column({ type: 'longtext', transformer: simpleJSON<Output[]>('receipt.outputs')})
+    public outputs!: Output[]
 }
