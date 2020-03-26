@@ -9,7 +9,7 @@ export class TransactionMeta {
     @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.txID') })
     public txID!: string
 
-    @OneToOne(type => Transaction, tx => tx.meta, {cascade: ['insert']})
+    @OneToOne(type => Transaction, tx => tx.meta)
     public transaction!: Transaction
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'tx.blockID') })
