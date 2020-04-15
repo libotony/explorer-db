@@ -10,6 +10,7 @@ export class Block {
     @Column()
     public number!: number
 
+    @Index()
     @Column({unsigned: true})
     public timestamp!: number
 
