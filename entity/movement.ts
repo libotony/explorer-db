@@ -3,6 +3,7 @@ import { fixedBytes, amount, moveIndex } from '../transformers'
 import { AssetType, MoveIndex } from '../types'
 import { Block } from './block'
 import { AggregatedMovement } from './aggregated-move'
+import { Transaction } from './transaction'
 
 @Entity()
 @Index(['blockID', 'moveIndex'])
@@ -26,6 +27,11 @@ export class AssetMovement {
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'move.blockID') })
     public blockID!: string
 
+    @ManyToOne(type => Transaction, { onDelete: 'SET NULL', onUpdate: 'SET NULL' })
+    @JoinColumn({name: 'txID'})
+    public transaction!: Transaction
+
+    // No foreign key on txID, use modified migration to initiate database
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'move.txID') })
     @Index()
     public txID!: string

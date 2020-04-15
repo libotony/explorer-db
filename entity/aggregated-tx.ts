@@ -2,7 +2,6 @@ import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } 
 import { fixedBytes, txSeq } from '../transformers'
 import { TXSeq, MoveType } from '../types'
 import { Block } from './block'
-import { TransactionMeta } from './tx-meta'
 import { Transaction } from './transaction'
 
 @Entity()
@@ -32,7 +31,7 @@ export class AggregatedTransaction {
     @JoinColumn({name: 'txID'})
     public transaction!: Transaction
 
-    // No foreign key on, use modified migration to initiate database
+    // No foreign key on txID, use modified migration to initiate database
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'aggregatedTX.txID')})
     public txID!: string
 }
