@@ -16,6 +16,12 @@ export interface Output {
     transfers: Transfer[]
 }
 
+export interface VMError {
+    error: string,
+    reason: string,
+    clauseIndex: number,
+}
+
 export interface Clause {
     to: string | null
     value: string | number

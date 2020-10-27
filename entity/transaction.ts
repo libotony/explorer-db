@@ -1,6 +1,6 @@
 import { Entity, Column, JoinColumn, PrimaryColumn, OneToOne } from 'typeorm'
 import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, amount } from '../transformers'
-import { Clause, Output } from '../types'
+import { Clause, Output, VMError } from '../types'
 import { TransactionMeta } from './tx-meta'
 
 @Entity()
@@ -66,4 +66,8 @@ export class Transaction {
 
     @Column({ type: 'longtext', transformer: simpleJSON<Output[]>('receipt.outputs')})
     public outputs!: Output[]
+
+    // abstract
+    @Column({ type: 'text', transformer: simpleJSON<VMError>('tx-abstract.vmError', true) })
+    public vmError!: VMError|null
 }

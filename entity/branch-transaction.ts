@@ -1,6 +1,6 @@
 import { Entity, Column, JoinColumn, PrimaryColumn, Index, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, amount, txSeq } from '../transformers'
-import { Clause, Output, TXSeq } from '../types'
+import { Clause, Output, TXSeq, VMError } from '../types'
 import { Block } from './block'
 
 @Entity()
@@ -76,4 +76,8 @@ export class BranchTransaction {
 
     @Column({ type: 'longtext', transformer: simpleJSON<Output[]>('receipt.outputs')})
     public outputs!: Output[]
+
+    // abstract
+    @Column({ type: 'text', transformer: simpleJSON<VMError>('tx-abstract.vmError', true) })
+    public vmError!: VMError|null
 }
