@@ -78,6 +78,6 @@ export class BranchTransaction {
     public outputs!: Output[]
 
     // abstract
-    @Column({ type: 'text', transformer: simpleJSON<VMError>('tx-abstract.vmError', true) })
+    @Column({ type: 'text', nullable: true, transformer: simpleJSON<VMError>('tx-abstract.vmError', true) })
     public vmError!: VMError|null
 }

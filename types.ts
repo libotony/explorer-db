@@ -18,7 +18,7 @@ export interface Output {
 
 export interface VMError {
     error: string,
-    reason: string,
+    reason: string|null,
     clauseIndex: number,
 }
 
