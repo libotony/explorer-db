@@ -12,8 +12,8 @@ export interface Transfer {
 
 export interface Output {
     contractAddress: string | null,
-    events: Event[],
-    transfers: Transfer[]
+    events: Array<Event&{overallIndex?: number}>,
+    transfers: Array<Transfer&{overallIndex?: number}>,
 }
 
 export interface VMError {
