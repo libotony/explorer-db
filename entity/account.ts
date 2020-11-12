@@ -27,6 +27,12 @@ export class Account {
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.sponsor', true), nullable: true })
     public sponsor!: string | null
 
+    @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.deployer', true), nullable: true })
+    public deployer!: string | null
+
+    @Column({ type: 'boolean' })
+    public suicided!: boolean
+
     @Column({ type: 'varchar', nullable: true })
     public alias!: string | null
 }
