@@ -49,7 +49,10 @@ export enum AssetType {
     JUR,
     AQD,
     YEET,
-    HAI
+    HAI,
+    MDN,
+    VEED,
+    VVET
 }
 
 export interface MoveIndex {
