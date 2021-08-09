@@ -52,6 +52,7 @@ export enum AssetType {
     HAI,
     MDN,
     VEED,
+    VPU,
     VVET
 }
 
