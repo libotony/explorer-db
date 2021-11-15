@@ -53,7 +53,10 @@ export enum AssetType {
     MDN,
     VEED,
     VPU,
-    VVET
+    MVG,
+    WoV,
+    GEMS,
+    VEX
 }
 
 export interface MoveIndex {
