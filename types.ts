@@ -89,3 +89,9 @@ export enum AuthEvent {
     Activate,
     Deactivate
 }
+
+export enum CountType {
+    TX = 0,
+    Signed,
+    Transfer = 100
+}
