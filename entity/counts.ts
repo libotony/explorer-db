@@ -1,12 +1,11 @@
-import { Entity, Column, PrimaryColumn, Index } from 'typeorm'
-import { fixedBytes } from '../transformers'
+import { Entity, Column, PrimaryColumn } from 'typeorm'
+import { nullableAddress } from '../transformers'
 import { CountType } from '../types'
 
 @Entity()
-@Index(['address', 'type'])
 export class Counts {
-    @PrimaryColumn({ type: 'binary', length: 20, transformer: fixedBytes(20, 'counts.address') })
-    public address!: string
+    @PrimaryColumn({ type: 'binary', length: 20, transformer: nullableAddress('counts.address') })
+    public address!: string|null
 
     @PrimaryColumn()
     public type!: CountType
@@ -16,7 +15,6 @@ export class Counts {
 
     @Column({ unsigned: true })
     public out!: number
-
 
     @Column({ unsigned: true })
     public self!: number

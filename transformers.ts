@@ -57,6 +57,28 @@ export const fixedBytes = (len= 32, context: string, nullable= false) =>  {
     })
 }
 
+export const nullableAddress = (context: string) => {
+    return makeTransformer({
+        from: (val: Buffer) => {
+            if (val.length === 0) {
+                return null
+            }
+            return '0x' + val!.toString('hex')
+        },
+        to: (val: string|null) => {
+            if (val === null) {
+                return Buffer.alloc(0)
+            }
+            if (!/^0x[0-9a-fA-f]+/i.test(val!)) {
+                throw new Error(context + ': bytes 20 hex string required: ' + val)
+            }
+
+            const str = sanitizeHex(val!).padStart(20 * 2, '0')
+            return Buffer.from(str, 'hex')
+        }
+    })
+}
+
 export const compactFixedBytes = (len = 32, context: string, nullable = false) =>  {
     return makeTransformer({
         from: (val: Buffer|null) => {
