@@ -4,7 +4,7 @@ import { CountType } from '../types'
 
 @Entity()
 export class Counts {
-    @PrimaryColumn({ type: 'binary', length: 20, transformer: nullableAddress('counts.address') })
+    @PrimaryColumn({ type: 'binary', length: 21, transformer: nullableAddress('counts.address') })
     public address!: string|null
 
     @PrimaryColumn()

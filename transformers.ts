@@ -1,5 +1,5 @@
 import { sanitizeHex } from './utils'
-import { FindOperator} from 'typeorm'
+import { FindOperator } from 'typeorm'
 import { MoveIndex, MoveSeq, TXSeq } from './types'
 
 interface ValueTransformer<DBType, EntityType> {
@@ -35,15 +35,15 @@ const makeTransformer = <DBType, EntityType>(transformer: ValueTransformer<DBTyp
     }
 }
 
-export const fixedBytes = (len= 32, context: string, nullable= false) =>  {
+export const fixedBytes = (len = 32, context: string, nullable = false) => {
     return makeTransformer({
-        from: (val: Buffer|null) => {
+        from: (val: Buffer | null) => {
             if (nullable && val === null) {
                 return null
             }
             return '0x' + val!.toString('hex')
         },
-        to: (val: string|null) => {
+        to: (val: string | null) => {
             if (nullable && val === null) {
                 return null
             }
@@ -57,31 +57,39 @@ export const fixedBytes = (len= 32, context: string, nullable= false) =>  {
     })
 }
 
+// 21 for bytes storing address,using the first byte as a indicator 0x1 means null address
+// used in the case of nullable address as primary key, but primary key can not be null
+const nullPrefix = 0x1
 export const nullableAddress = (context: string) => {
     return makeTransformer({
         from: (val: Buffer) => {
-            if (val.length === 0) {
+            const prefix = val[0]
+            if (prefix === nullPrefix) {
                 return null
             }
-            return '0x' + val!.toString('hex')
+
+            return '0x' + val.slice(1).toString('hex')
         },
-        to: (val: string|null) => {
+        to: (val: string | null) => {
             if (val === null) {
-                return Buffer.alloc(0)
+                const buf = Buffer.alloc(21)
+                buf[0] = nullPrefix
+
+                return buf
             }
             if (!/^0x[0-9a-fA-f]+/i.test(val!)) {
                 throw new Error(context + ': bytes 20 hex string required: ' + val)
             }
 
-            const str = sanitizeHex(val!).padStart(20 * 2, '0')
+            const str = '00' + sanitizeHex(val!).padStart(20 * 2, '0')
             return Buffer.from(str, 'hex')
         }
     })
 }
 
-export const compactFixedBytes = (len = 32, context: string, nullable = false) =>  {
+export const compactFixedBytes = (len = 32, context: string, nullable = false) => {
     return makeTransformer({
-        from: (val: Buffer|null) => {
+        from: (val: Buffer | null) => {
             if (nullable && val === null) {
                 return null
             }
@@ -91,7 +99,7 @@ export const compactFixedBytes = (len = 32, context: string, nullable = false) =
             }
             return '0x' + val!.toString('hex')
         },
-        to: (val: string|null) => {
+        to: (val: string | null) => {
             if (nullable && val === null) {
                 return null
             }
@@ -116,15 +124,15 @@ export const amount = makeTransformer({
     }
 })
 
-export const bytes = (context: string, nullable = false) =>  {
+export const bytes = (context: string, nullable = false) => {
     return makeTransformer({
-        from: (val: Buffer|null) => {
+        from: (val: Buffer | null) => {
             if (nullable && val === null) {
                 return null
             }
             return '0x' + val!.toString('hex')
         },
-        to: (val: string|null) => {
+        to: (val: string | null) => {
             if (nullable && val === null) {
                 return null
             }
@@ -145,7 +153,7 @@ export const bytes = (context: string, nullable = false) =>  {
 
 export const simpleJSON = <T>(context: string, nullable = false) => {
     return makeTransformer({
-        from: (val: string|null) => {
+        from: (val: string | null) => {
             if (nullable && val === null) {
                 return null
             }
