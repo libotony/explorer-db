@@ -33,6 +33,7 @@ export enum SnapType {
     Authority,
     GasAdjustment,
     ExpandTX,
+    Revert,
     VIP180Token = 100
 }
 
