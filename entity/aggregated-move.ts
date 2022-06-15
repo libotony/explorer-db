@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } from 'typeorm'
 import { fixedBytes, moveSeq } from '../transformers'
-import { AssetType, MoveSeq, MoveType } from '../types'
+import { MoveSeq, MoveType } from '../types'
 import { AssetMovement } from './movement'
 
 @Entity()
@@ -14,7 +14,7 @@ export class AggregatedMovement {
     public participant!: string
 
     @Column()
-    public asset!: AssetType
+    public asset!: number
 
     @Column()
     public movementID!: number

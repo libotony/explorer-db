@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn, OneToMany } from 'typeorm'
 import { fixedBytes, amount, moveIndex } from '../transformers'
-import { AssetType, MoveIndex } from '../types'
+import { MoveIndex } from '../types'
 import { Block } from './block'
 import { AggregatedMovement } from './aggregated-move'
 import { Transaction } from './transaction'
@@ -37,7 +37,7 @@ export class AssetMovement {
     public txID!: string
 
     @Column()
-    public asset!: AssetType
+    public asset!: number
 
     @Column({ type: 'binary', length: 6, transformer: moveIndex })
     public moveIndex!: MoveIndex

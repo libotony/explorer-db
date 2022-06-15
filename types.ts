@@ -37,29 +37,6 @@ export enum SnapType {
     VIP180Token = 100
 }
 
-export enum AssetType {
-    VET = 0,
-    VTHO,
-    PLA,
-    SHA,
-    EHrT,
-    DBET,
-    TIC,
-    OCE,
-    SNK,
-    JUR,
-    AQD,
-    YEET,
-    HAI,
-    MDN,
-    VEED,
-    VPU,
-    MVG,
-    WoV,
-    GEMS,
-    VEX
-}
-
 export interface MoveIndex {
     txIndex: number
     clauseIndex: number

@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryColumn, Index } from 'typeorm'
 import {fixedBytes, amount} from '../transformers'
-import { AssetType } from '../types'
 
 @Entity()
 export class TokenBalance {
@@ -11,5 +10,5 @@ export class TokenBalance {
     public balance!: bigint
 
     @PrimaryColumn()
-    public type!: AssetType
+    public type!: number
 }
