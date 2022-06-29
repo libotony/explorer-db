@@ -49,6 +49,9 @@ export class Block {
     public txCount!: number
 
     @Column()
+    public revertCount!:number
+
+    @Column()
     public txsFeatures!: number
 
     @Column()
