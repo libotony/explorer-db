@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryColumn, Index } from 'typeorm'
-import {fixedBytes, amount} from '../transformers'
+import { fixedBytes, amount } from '../transformers'
 
 @Entity()
 export class Block {
-    @PrimaryColumn({type: 'binary', length: 32, transformer: fixedBytes(32, 'block.id')})
+    @PrimaryColumn({ type: 'binary', length: 32, transformer: fixedBytes(32, 'block.id') })
     public id!: string
 
     @Index()
@@ -11,16 +11,16 @@ export class Block {
     public number!: number
 
     @Index()
-    @Column({unsigned: true})
+    @Column({ unsigned: true })
     public timestamp!: number
 
-    @Column({unsigned: true})
+    @Column({ type: 'bigint', unsigned: true })
     public gasLimit!: number
 
-    @Column({unsigned: true})
+    @Column({ type: 'bigint', unsigned: true })
     public gasUsed!: number
 
-    @Column({unsigned: true})
+    @Column({ unsigned: true })
     public totalScore!: number
 
     @Column({ type: 'binary', length: 32, transformer: fixedBytes(32, 'block.parentID') })
@@ -42,14 +42,14 @@ export class Block {
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'block.beneficiary') })
     public beneficiary!: string
 
-    @Column({type: 'boolean'})
+    @Column({ type: 'boolean' })
     public isTrunk!: boolean
 
     @Column()
     public txCount!: number
 
     @Column()
-    public revertCount!:number
+    public revertCount!: number
 
     @Column()
     public txsFeatures!: number
