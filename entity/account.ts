@@ -12,6 +12,12 @@ export class Account {
     @Column({ type: 'binary', length: 24, transformer: amount })
     public energy!: bigint
 
+    @Column({ type: 'binary', length: 24, transformer: amount })
+    public generated!: bigint
+
+    @Column({ type: 'binary', length: 24, transformer: amount })
+    public paid!: bigint
+
     @Column({ unsigned: true })
     public blockTime!: number
 
