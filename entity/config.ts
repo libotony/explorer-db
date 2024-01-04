@@ -5,6 +5,6 @@ export class Config {
     @PrimaryColumn({unique: true})
     public key!: string
 
-    @Column()
+    @Column({ type: 'longtext' })
     public value!: string
 }
