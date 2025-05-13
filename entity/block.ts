@@ -57,8 +57,11 @@ export class Block {
     @Column()
     public score!: number
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public reward!: bigint
+
+    @Column({ type: 'binary', length: 24, transformer: amount(true) })
+    public baseFeePerGas!: bigint|null
 
     @Column()
     public gasChanged!: number

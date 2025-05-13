@@ -1,5 +1,5 @@
 import { Entity, Column, JoinColumn, PrimaryColumn, Index, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, amount, txSeq } from '../transformers'
+import { fixedBytes, simpleJSON, compactFixedBytes, amount, txSeq, uint8 } from '../transformers'
 import { Clause, Output, TXSeq, VMError } from '../types'
 import { Block } from './block'
 
@@ -22,7 +22,10 @@ export class BranchTransaction {
     @Column({ type: 'binary', length: 10, transformer: txSeq })
     public seq!: TXSeq
 
-    @Column({ type: 'binary', length: 1, transformer: chainTag })
+    @Column({ type: 'binary', length: 1, transformer: uint8(true) })
+    public type!: number|null
+
+    @Column({ type: 'binary', length: 1, transformer: uint8() })
     public chainTag!: number
 
     @Column({ type: 'binary', length: 8, transformer: fixedBytes(8 , 'tx.blockRef') })
@@ -33,6 +36,12 @@ export class BranchTransaction {
 
     @Column({ unsigned: true })
     public gasPriceCoef!: number
+
+    @Column({ type: 'binary', length: 24, transformer: amount(true) })
+    public maxPriorityFeePerGas!: bigint | null
+    
+    @Column({ type: 'binary', length: 24, transformer: amount(true) })
+    public maxFeePerGas!: bigint|null
 
     @Column({ unsigned: true })
     public gas!: number
@@ -65,10 +74,10 @@ export class BranchTransaction {
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'receipt.gasPayer') })
     public gasPayer!: string
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public paid!: bigint
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public reward!: bigint
 
     @Column({ type: 'boolean' })

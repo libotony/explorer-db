@@ -6,16 +6,16 @@ export class Account {
     @PrimaryColumn({ type: 'binary', length: 20, transformer: fixedBytes(20, 'account.address') })
     public address!: string
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public balance!: bigint
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public energy!: bigint
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public generated!: bigint
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public paid!: bigint
 
     @Column({ unsigned: true })

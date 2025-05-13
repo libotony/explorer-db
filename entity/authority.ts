@@ -25,7 +25,7 @@ export class Authority {
     @Column()
     public endorsed!: boolean
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public reward!: bigint
 
     @Column()

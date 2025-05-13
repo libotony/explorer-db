@@ -1,5 +1,5 @@
 import { Entity, Column, JoinColumn, PrimaryColumn, OneToOne } from 'typeorm'
-import { fixedBytes, simpleJSON, compactFixedBytes, chainTag, amount } from '../transformers'
+import { fixedBytes, simpleJSON, compactFixedBytes, uint8, amount } from '../transformers'
 import { Clause, Output, VMError } from '../types'
 import { TransactionMeta } from './tx-meta'
 
@@ -12,7 +12,10 @@ export class Transaction {
     @JoinColumn({name: 'txID'})
     public meta!: TransactionMeta
 
-    @Column({ type: 'binary', length: 1, transformer: chainTag })
+    @Column({ type: 'binary', length: 1, transformer: uint8(true) })
+    public type!: number|null
+
+    @Column({ type: 'binary', length: 1, transformer: uint8() })
     public chainTag!: number
 
     @Column({ type: 'binary', length: 8, transformer: fixedBytes(8 , 'tx.blockRef') })
@@ -22,7 +25,13 @@ export class Transaction {
     public expiration!: number
 
     @Column({ unsigned: true })
-    public gasPriceCoef!: number
+    public gasPriceCoef!: number | null
+
+    @Column({ type: 'binary', length: 24, transformer: amount(true) })
+    public maxPriorityFeePerGas!: bigint | null
+    
+    @Column({ type: 'binary', length: 24, transformer: amount(true) })
+    public maxFeePerGas!: bigint|null
 
     @Column({ unsigned: true })
     public gas!: number
@@ -55,10 +64,10 @@ export class Transaction {
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'receipt.gasPayer') })
     public gasPayer!: string
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public paid!: bigint
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public reward!: bigint
 
     @Column({ type: 'boolean' })

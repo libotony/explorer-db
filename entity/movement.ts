@@ -17,7 +17,7 @@ export class AssetMovement {
     @Column({ type: 'binary', length: 20, transformer: fixedBytes(20, 'move.recipient') })
     public recipient!: string
 
-    @Column({ type: 'binary', length: 24, transformer: amount })
+    @Column({ type: 'binary', length: 24, transformer: amount() })
     public amount!: bigint
 
     @ManyToOne(type => Block)

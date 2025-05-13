@@ -113,16 +113,25 @@ export const compactFixedBytes = (len = 32, context: string, nullable = false) =
     })
 }
 
-export const amount = makeTransformer({
-    // 24bytes
-    from: (val: Buffer) => {
-        return BigInt('0x' + val.toString('hex'))
-    },
-    to: (val: BigInt) => {
-        const str = val.toString(16).padStart(48, '0')
-        return Buffer.from(str, 'hex')
-    }
-})
+export const amount = (nullable = false) => {
+    return makeTransformer({
+        // 24bytes
+        from: (val: Buffer | null) => {
+            if (nullable && val === null) {
+                return null
+            }
+            return BigInt('0x' + val!.toString('hex'))
+        },
+        to: (val: BigInt | null) => {
+            if (nullable && val === null) {
+                return null
+            }
+
+            const str = val!.toString(16).padStart(48, '0')
+            return Buffer.from(str, 'hex')
+        }
+    })
+}
 
 export const bytes = (context: string, nullable = false) => {
     return makeTransformer({
@@ -186,17 +195,26 @@ export const moveIndex = makeTransformer({
     }
 })
 
-export const chainTag = makeTransformer({
-    from: (val: Buffer): number => {
-        return val.readUInt8(0)
-    },
-    to: (val: number) => {
-        const buf = Buffer.alloc(1)
-        buf.writeUInt8(val, 0)
+export const uint8 = (nullable = false) => {
+    return makeTransformer({
+        from: (val: Buffer | null) => {
+            if (nullable && val === null) {
+                return null
+            }
+            return val!.readUInt8(0)
+        },
+        to: (val: number | null) => {
+            if (nullable && val === null) {
+                return null
+            }
 
-        return buf
-    }
-})
+            const buf = Buffer.alloc(1)
+            buf.writeUInt8(val!, 0)
+
+            return buf
+        }
+    })
+}
 
 export const moveSeq = makeTransformer({
     from: (val: Buffer): MoveSeq => {
