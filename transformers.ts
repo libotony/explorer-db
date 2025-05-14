@@ -7,6 +7,10 @@ interface ValueTransformer<DBType, EntityType> {
     to: (val: EntityType) => DBType
 }
 
+const isNullOrUndefined = (val: any) => {
+    return val === null || val === undefined
+}
+
 // transformers not work in FindOperators(issue of typeorm)
 const makeTransformer = <DBType, EntityType>(transformer: ValueTransformer<DBType, EntityType>) => {
     return {
@@ -38,13 +42,13 @@ const makeTransformer = <DBType, EntityType>(transformer: ValueTransformer<DBTyp
 export const fixedBytes = (len = 32, context: string, nullable = false) => {
     return makeTransformer({
         from: (val: Buffer | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             return '0x' + val!.toString('hex')
         },
         to: (val: string | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             if (!/^0x[0-9a-fA-f]+/i.test(val!)) {
@@ -90,7 +94,7 @@ export const nullableAddress = (context: string) => {
 export const compactFixedBytes = (len = 32, context: string, nullable = false) => {
     return makeTransformer({
         from: (val: Buffer | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             const index = val!.findIndex(x => x !== 0)
@@ -100,7 +104,7 @@ export const compactFixedBytes = (len = 32, context: string, nullable = false) =
             return '0x' + val!.toString('hex')
         },
         to: (val: string | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             if (!/^0x[0-9a-fA-f]+/i.test(val!)) {
@@ -117,13 +121,13 @@ export const amount = (nullable = false) => {
     return makeTransformer({
         // 24bytes
         from: (val: Buffer | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             return BigInt('0x' + val!.toString('hex'))
         },
         to: (val: BigInt | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
 
@@ -136,13 +140,13 @@ export const amount = (nullable = false) => {
 export const bytes = (context: string, nullable = false) => {
     return makeTransformer({
         from: (val: Buffer | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             return '0x' + val!.toString('hex')
         },
         to: (val: string | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
 
@@ -163,13 +167,13 @@ export const bytes = (context: string, nullable = false) => {
 export const simpleJSON = <T>(context: string, nullable = false) => {
     return makeTransformer({
         from: (val: string | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             return JSON.parse(val!) as T
         },
         to: (val: T | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             return JSON.stringify(val)
@@ -198,13 +202,13 @@ export const moveIndex = makeTransformer({
 export const uint8 = (nullable = false) => {
     return makeTransformer({
         from: (val: Buffer | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
             return val!.readUInt8(0)
         },
         to: (val: number | null) => {
-            if (nullable && val === null) {
+            if (nullable && isNullOrUndefined(val)) {
                 return null
             }
 

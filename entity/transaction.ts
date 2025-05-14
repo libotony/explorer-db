@@ -12,8 +12,8 @@ export class Transaction {
     @JoinColumn({name: 'txID'})
     public meta!: TransactionMeta
 
-    @Column({ type: 'binary', length: 1, transformer: uint8(true) })
-    public type!: number|null
+    @Column({ type: 'binary', length: 1, transformer: uint8() })
+    public type!: number
 
     @Column({ type: 'binary', length: 1, transformer: uint8() })
     public chainTag!: number
@@ -24,13 +24,13 @@ export class Transaction {
     @Column({ unsigned: true })
     public expiration!: number
 
-    @Column({ unsigned: true })
-    public gasPriceCoef!: number | null
-
-    @Column({ type: 'binary', length: 24, transformer: amount(true) })
+    @Column({ type:'int', unsigned: true, nullable: true })
+    public gasPriceCoef!: number|null
+    
+    @Column({ type: 'binary', nullable: true, length: 24, transformer: amount(true) })
     public maxPriorityFeePerGas!: bigint | null
     
-    @Column({ type: 'binary', length: 24, transformer: amount(true) })
+    @Column({ type: 'binary', nullable: true, length: 24, transformer: amount(true) })
     public maxFeePerGas!: bigint|null
 
     @Column({ unsigned: true })
