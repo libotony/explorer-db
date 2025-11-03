@@ -60,6 +60,9 @@ export class Block {
     @Column({ type: 'binary', length: 24, transformer: amount() })
     public reward!: bigint
 
+    @Column({ type: 'binary', length: 24, transformer: amount() })
+    public issuance!: bigint
+
     @Column({ type: 'binary', nullable: true, length: 24, transformer: amount(true) })
     public baseFeePerGas!: bigint|null
 
