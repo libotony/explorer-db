@@ -63,6 +63,9 @@ export class Block {
     @Column({ type: 'binary', length: 24, transformer: amount() })
     public issuance!: bigint
 
+    @Column({ type: 'binary', length: 20, nullable: true, transformer: fixedBytes(20, 'block.delegator', true) })
+    public delegator!: string|null
+
     @Column({ type: 'binary', nullable: true, length: 24, transformer: amount(true) })
     public baseFeePerGas!: bigint|null
 
